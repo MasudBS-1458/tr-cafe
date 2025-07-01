@@ -6,7 +6,7 @@ interface AuthState {
   user: null;
   token: string | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  errorMessage: string | null;
+  errorMessage: string | null | { error: string };
 }
 
 const initialState: AuthState = {
@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post('https://personal-balance-manager.onrender.com/api/register', userData);
       return response.data;
     } catch (errorMessage: any) {
-      return rejectWithValue(errorMessage.response.data);
+      return rejectWithValue(errorMessage?.response?.data?.error);
     }
   }
 );

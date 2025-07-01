@@ -44,7 +44,7 @@ const Login: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-800">{errorMessage.error}</p>
+                <p className="text-sm text-red-800"> {typeof errorMessage === 'string' ? errorMessage : errorMessage?.error}</p>
               </div>
             </div>
           </div>
