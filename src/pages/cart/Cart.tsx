@@ -6,6 +6,7 @@ import {
 } from '../../redux/reducers/cart/cartSlice';
 import { FaTrash, FaShoppingCart, FaMinus, FaPlus, FaArrowRight } from 'react-icons/fa';
 import type { RootState } from '../../redux/reducers/store';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Cart = () => {
       ) : (
         <div className="bg-white rounded-md  p-6 grid md:grid-cols-3 gap-8">
           {/* Cart Items */}
-          <div className="md:col-span-2 max-h-[60vh] overflow-y-auto pr-2">
+          <div className="md:col-span-2  pr-2">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Your Cart ({totalQuantity})</h2>
               <button
@@ -93,7 +94,7 @@ const Cart = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-gray-100 p-5 rounded-md">
+          <div className="bg-gray-100 p-5 rounded-md max-h-[60vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
 
             <div className="space-y-2 text-sm">
@@ -118,20 +119,21 @@ const Cart = () => {
               <span>৳{totalPrice.toFixed(2)}</span>
             </div>
 
-            <button
-              onClick={() => alert('Proceeding to checkout')}
-              className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2"
-            >
-              Checkout <FaArrowRight />
-            </button>
+            <Link to="/checkout">
+              <button
+                className="w-full bg-orange-500 text-white py-3 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2"
+              >
+                Checkout <FaArrowRight />
+              </button></Link>
 
             <p className="text-xs text-gray-500 mt-3 text-center">
               Free shipping on orders over ৳500
             </p>
           </div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 
