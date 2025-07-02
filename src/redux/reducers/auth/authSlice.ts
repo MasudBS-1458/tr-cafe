@@ -31,7 +31,7 @@ export const registerUser = createAsyncThunk(
       const response = await publicPost('/register', userData);
       // Store email in localStorage
       localStorage.setItem('otpVerificationEmail', userData.email);
-      return response;
+      return response.data;
     } catch (error) {
       return rejectWithValue(handleAuthError(error));
     }
@@ -57,7 +57,7 @@ export const loginUser = createAsyncThunk(
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       const response = await publicPost('/login', credentials);
-      return response.data;
+      return response;
     } catch (error) {
       return rejectWithValue(handleAuthError(error));
     }
@@ -122,8 +122,7 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.isAuthenticated = 'success';
         state.user = action.payload?.user || null;
-        console.log("token", action.payload);
-        state.token = action.payload.token || null;
+        state.token = action?.payload?.token || null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
