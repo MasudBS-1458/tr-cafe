@@ -64,43 +64,43 @@ const Food = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="w-3/4 mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Filter Section - Modern Sidebar */}
-        <div className="w-full lg:w-72 flex-shrink-0">
-          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-sm sticky top-4">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-800">Filters</h2>
+        {/* Filter Section - Minimalist Design */}
+        <div className="w-full lg:w-64 flex-shrink-0">
+          <div className="bg-white rounded-lg p-4 sticky top-4">
+            <div className="flex justify-between items-center border-b border-b-gray-200 mb-6">
+              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
               {(filters.category || filters.minPrice !== 0 || filters.maxPrice !== 1000 || filters.sortBy) && (
                 <button
                   onClick={resetFilters}
-                  className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  Reset all
+                  Clear all
                 </button>
               )}
             </div>
 
-            {/* Category Filter - Modern Chip Selection */}
+            {/* Category Filter - Simple Vertical List */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-3">Categories</h3>
-              <div className="flex flex-wrap gap-2">
+              <h3 className="text-sm font-medium text-gray-900   border-b border-b-gray-200 ">Categories</h3>
+              <div className="space-y-2 mt-2">
                 <button
                   onClick={() => handleCategoryChange('')}
-                  className={`px-3 py-1.5 text-sm rounded-full transition-colors ${!filters.category
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className={`w-full text-left px-2 py-1.5 text-sm rounded transition-colors ${!filters.category
+                    ? 'bg-gray-100 text-gray-900 font-medium'
+                    : 'text-gray-600 hover:bg-gray-50'
                     }`}
                 >
-                  All
+                  All Categories
                 </button>
                 {categories.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryChange(category)}
-                    className={`px-3 py-1.5 text-sm rounded-full transition-colors ${filters.category === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    className={`w-full text-left px-2 py-1.5 text-sm rounded transition-colors ${filters.category === category
+                      ? 'bg-gray-100 text-gray-900 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
                       }`}
                   >
                     {category}
@@ -109,9 +109,9 @@ const Food = () => {
               </div>
             </div>
 
-            {/* Price Range Filter - Dual Slider */}
+            {/* Price Range Filter - Clean Slider */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-3">Price Range</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-3  border-b border-b-gray-200">Price Range</h3>
               <div className="px-2">
                 <Slider
                   range
@@ -121,21 +121,19 @@ const Food = () => {
                   value={localPriceRange}
                   onChange={handlePriceChange}
                   onAfterChange={handlePriceAfterChange}
-                  trackStyle={[{ backgroundColor: '#3b82f6' }]}
+                  trackStyle={[{ backgroundColor: '#000' }]}
                   handleStyle={[
-                    { borderColor: '#3b82f6', boxShadow: 'none' },
-                    { borderColor: '#3b82f6', boxShadow: 'none' }
+                    { borderColor: '#000', boxShadow: 'none', width: 16, height: 16, marginTop: -7 },
+                    { borderColor: '#000', boxShadow: 'none', width: 16, height: 16, marginTop: -7 }
                   ]}
-                  activeDotStyle={{ borderColor: '#3b82f6' }}
+                  railStyle={{ backgroundColor: '#e5e7eb' }}
                 />
                 <div className="flex justify-between mt-2 text-xs text-gray-500">
-                  <span>{localPriceRange[0]}</span>
-                  <span>{localPriceRange[1]}</span>
+                  <span>৳{localPriceRange[0]}</span>
+                  <span>৳{localPriceRange[1]}</span>
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
 
@@ -154,10 +152,9 @@ const Food = () => {
             </div>
           )}
 
-
           {loading && (
-            <div className="">
-              <div className="animate-spin text-blue-600">
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin text-gray-400">
                 <FaSpinner size={32} />
               </div>
             </div>
@@ -167,13 +164,13 @@ const Food = () => {
           {!loading && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-lg font-medium text-gray-700">
-                  Showing {foods.length} {foods.length === 1 ? 'item' : 'items'}
+                <h2 className="text-lg font-medium text-gray-900">
+                  {foods.length} {foods.length === 1 ? 'Item' : 'Items'}
                 </h2>
                 {foods.length === 0 && (
                   <button
                     onClick={resetFilters}
-                    className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                   >
                     Reset filters
                   </button>
@@ -181,11 +178,11 @@ const Food = () => {
               </div>
 
               {foods.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="text-center py-12 bg-gray-50 rounded-lg">
                   <p className="text-gray-500 mb-4">No items match your filters</p>
                   <button
                     onClick={resetFilters}
-                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 text-sm bg-black text-white rounded hover:bg-gray-800 transition-colors"
                   >
                     Show all items
                   </button>
@@ -193,55 +190,47 @@ const Food = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {foods.map((food) => (
-                    <div key={food._id} className="bg-white rounded-lg border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
+                    <div key={food._id} className="bg-white rounded-lg overflow-hidden group">
                       <div className="relative">
                         {food.image && (
                           <div className="h-48 bg-gray-100 overflow-hidden">
                             <img
                               src={food.image}
                               alt={food.name}
-                              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>
                         )}
-                        <button
-                          onClick={() => toggleFavorite(food._id)}
-                          className="absolute top-3 right-3 p-2 bg-white bg-opacity-80 rounded-full hover:bg-opacity-100 transition-all"
-                          aria-label="Add to favorites"
-                        >
-                          {favorites.includes(food._id) ? (
-                            <FaHeart className="text-red-500" />
-                          ) : (
-                            <FaRegHeart className="text-gray-400 hover:text-red-500" />
-                          )}
-                        </button>
+                        <div className="absolute top-3 right-3 flex space-x-2">
+                          <button
+                            onClick={() => toggleFavorite(food._id)}
+                            className="p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors"
+                            aria-label="Add to favorites"
+                          >
+                            {favorites.includes(food._id) ? (
+                              <FaHeart className="text-red-500" />
+                            ) : (
+                              <FaRegHeart className="text-gray-400 hover:text-red-500" />
+                            )}
+                          </button>
+                          <button
+                            disabled={!food.available}
+                            className="p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors"
+                            aria-label="Add to cart"
+                          >
+                            <FaShoppingCart className={food.available ? "text-gray-700 hover:text-black" : "text-gray-300"} />
+                          </button>
+                        </div>
                       </div>
                       <div className="p-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-medium text-gray-800">{food.name}</h3>
-                          <span className="font-medium text-blue-600">৳ {food.price}</span>
+                        <div className="flex justify-between items-start mb-1">
+                          <h3 className="font-medium text-gray-900">{food.name}</h3>
+                          <span className="font-medium">৳{food.price}</span>
                         </div>
-
-                        <div className="flex justify-between items-center text-xs text-gray-500 mb-3">
-                          <span className="bg-gray-100 px-2 py-1 rounded">{food.category}</span>
-                          <span>{food.preparationTime} min</span>
-                        </div>
-                        <button
-                          disabled={!food.available}
-                          className={`w-full flex items-center justify-center gap-2 py-2 text-sm rounded-lg transition-colors ${food.available
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            }`}
-                        >
-                          {food.available ? (
-                            <>
-                              <FaShoppingCart />
-                              Add to cart
-                            </>
-                          ) : (
-                            'Unavailable'
-                          )}
-                        </button>
+                        <p className="text-xs text-gray-500 mb-2">{food.category}</p>
+                        {!food.available && (
+                          <p className="text-xs text-red-500">Currently unavailable</p>
+                        )}
                       </div>
                     </div>
                   ))}
