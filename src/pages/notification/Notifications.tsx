@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Bell, Check, X, Truck, Gift, Star } from 'lucide-react';
-
 interface Notification {
   id: string;
   type: 'order' | 'delivery' | 'promotion' | 'review';
@@ -9,7 +8,6 @@ interface Notification {
   time: string;
   isRead: boolean;
 }
-
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -151,5 +149,4 @@ const Notifications: React.FC = () => {
     </div>
   );
 };
-
 export default Notifications;

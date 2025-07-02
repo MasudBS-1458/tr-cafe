@@ -1,0 +1,24 @@
+export interface OrderItem {
+  food: string;
+  quantity: number;
+  price: number;
+}
+
+export interface Order {
+  _id: string;
+  token: string;
+  items: OrderItem[];
+  totalAmount: number;
+  deliveryAddress: string;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  paymentMethod: "cash" | "card";
+  paymentStatus: "pending" | "paid" | "failed";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderState {
+  orders: Order[];
+  loading: boolean;
+  error: string | null;
+}

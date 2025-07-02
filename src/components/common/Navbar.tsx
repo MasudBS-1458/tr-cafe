@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
 
           <div className="hidden md:flex md:flex-col md:flex-row md:mx-6">
             <Link to="/" className="my-2 text-gray-700 hover:text-blue-500 md:mx-4 md:my-0">Home</Link>
-            <Link to="" className="my-2 text-gray-700 hover:text-blue-500 md:mx-4 md:my-0">Shop</Link>
+
             <Link to="" className="my-2 text-gray-700 hover:text-blue-500 md:mx-4 md:my-0">Contact</Link>
             <Link to="" className="my-2 text-gray-700 hover:text-blue-500 md:mx-4 md:my-0">About</Link>
           </div>

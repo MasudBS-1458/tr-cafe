@@ -4,7 +4,7 @@ export interface User {
 export interface AuthState {
   isAuthenticated: 'loading' | 'success';
   user: User | null;
-  token: string | null;
+  token: null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   errorMessage: string | null;
   registeredEmail: string | null;
