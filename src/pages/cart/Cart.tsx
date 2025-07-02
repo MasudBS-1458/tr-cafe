@@ -1,18 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  selectCartCount,
-  selectCartTotal,
   removeFromCart,
   updateQuantity,
   clearCart
 } from '../../redux/reducers/cart/cartSlice';
-import { FaTrash, FaShoppingCart, FaMinus, FaPlus } from 'react-icons/fa';
+import { FaTrash, FaShoppingCart, FaMinus, FaPlus, FaArrowRight } from 'react-icons/fa';
 import type { RootState } from '../../redux/reducers/store';
 
 const Cart = () => {
   const dispatch = useDispatch();
   const { totalQuantity, items, totalPrice } = useSelector((state: RootState) => state.carts);
-
 
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
@@ -27,84 +24,113 @@ const Cart = () => {
   };
 
   return (
-    <div className="">
-      <div className="">
-        <button
-          className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-colors"
-          aria-label="Cart"
-        >
-          <FaShoppingCart />
-
-        </button>
-
-        {items.length > 0 && (
-          <div className=" mt-2 w-80 bg-white rounded-lg shadow-lg p-4">
+    <div className=" relative p-4 max-w-5xl mx-auto md:mt-24">
+      {items.length === 0 ? (
+        <div className="text-center py-20 bg-white ">
+          <FaShoppingCart className="mx-auto text-red-500 text-6xl mb-4" />
+          <p className="text-gray-500 text-lg">Your cart is currently empty.</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-md  p-6 grid md:grid-cols-3 gap-8">
+          {/* Cart Items */}
+          <div className="md:col-span-2 max-h-[60vh] overflow-y-auto pr-2">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-medium">Your Cart ({totalQuantity})</h3>
+              <h2 className="text-xl font-semibold">Your Cart ({totalQuantity})</h2>
               <button
                 onClick={() => dispatch(clearCart())}
-                className="text-xs text-red-500 hover:text-red-700"
+                className="text-sm bg-gray-100 border rounded-md p-1 border-gray-100 text-red-500 hover:text-red-700"
               >
                 Clear All
               </button>
             </div>
 
-            <div className="max-h-64 overflow-y-auto space-y-3">
-              {items.map(item => (
-                <div key={item._id} className="flex items-center justify-between border-b pb-3">
-                  <div className="flex-1">
-                    <h4 className="font-medium">{item.name}</h4>
-                    <p className="text-sm text-gray-500">৳{item.price.toFixed(2)}</p>
-                  </div>
-
-                  <div className="flex items-center space-x-2 mx-2">
+            {items.map(item => (
+              <div key={item._id} className="flex items-start gap-4 py-4 border-b border-gray-200">
+                <div className="w-30 h-30 bg-gray-100 rounded-md ">
+                  {item.image ? (
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <FaShoppingCart className="text-gray-400 w-full h-full p-4" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-medium text-gray-800 transition-colors">{item.name}</h4>
+                      <p className="text-sm text-gray-500 transition-colors">৳{item.price.toFixed(2)}</p>
+                    </div>
                     <button
-                      onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                      className="p-1 text-gray-500 hover:text-black"
-                      aria-label="Decrease quantity"
+                      onClick={() => handleRemove(item._id)}
+                      className="text-gray-400 hover:text-red-500"
                     >
-                      <FaMinus size={12} />
-                    </button>
-                    <span className="text-sm w-6 text-center">{item.quantity}</span>
-                    <button
-                      onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                      className="p-1 text-gray-500 hover:text-black"
-                      aria-label="Increase quantity"
-                    >
-                      <FaPlus size={12} />
+                      <FaTrash size={14} />
                     </button>
                   </div>
 
-                  <div className="w-20 text-right">
+                  <div className="flex justify-between items-center mt-3">
+                    <div className="flex items-center  rounded-md overflow-hidden">
+                      <button
+                        onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
+                        className="px-2 py-1 text-gray-400 hover:bg-gray-100"
+                        aria-label="Decrease quantity"
+                      >
+                        <FaMinus size={12} />
+                      </button>
+                      <span className="px-4 transition-colors">{item.quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
+                        className="px-2 py-1 text-gray-400 hover:bg-gray-100"
+                        aria-label="Increase quantity"
+                      >
+                        <FaPlus size={12} />
+                      </button>
+                    </div>
                     <p className="text-sm font-medium">৳{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-
-                  <button
-                    onClick={() => handleRemove(item._id)}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                    aria-label="Remove item"
-                  >
-                    <FaTrash size={14} />
-                  </button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
 
-            <div className="mt-4 pt-4 border-t">
-              <div className="flex justify-between font-medium mb-4">
-                <span>Total:</span>
+          {/* Order Summary */}
+          <div className="bg-gray-100 p-5 rounded-md">
+            <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
+
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
                 <span>৳{totalPrice.toFixed(2)}</span>
               </div>
-              <button
-                className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition-colors"
-                onClick={() => alert('Proceeding to checkout')}
-              >
-                Proceed to Checkout
-              </button>
+              <div className="flex justify-between mt-4">
+                <span>Shipping</span>
+                <span className="text-green-600">Free</span>
+              </div>
+              <div className="flex justify-between mt-4">
+                <span>Tax </span>
+                <span>৳ 0.00</span>
+              </div>
             </div>
+
+            <hr className="my-4 " />
+
+            <div className="flex justify-between font-semibold text-base mb-4">
+              <span>Total</span>
+              <span>৳{totalPrice.toFixed(2)}</span>
+            </div>
+
+            <button
+              onClick={() => alert('Proceeding to checkout')}
+              className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2"
+            >
+              Checkout <FaArrowRight />
+            </button>
+
+            <p className="text-xs text-gray-500 mt-3 text-center">
+              Free shipping on orders over ৳500
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
