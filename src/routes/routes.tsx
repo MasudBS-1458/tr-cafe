@@ -10,6 +10,7 @@ import Profile from "../pages/user/Profile";
 import Notifications from "../pages/notification/Notifications";
 import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";
+import UserOrders from "../pages/user/UserOrders";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Notifications />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/user/orders/list",
+        element: (
+          <PrivateRoute>
+            <UserOrders />
           </PrivateRoute>
         ),
       },

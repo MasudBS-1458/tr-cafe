@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { Order } from "../../../types/orderTypes";
-import { privatePost } from "../../../services/apiCaller";
+import { privateGet, privatePost } from "../../../services/apiCaller";
 
 export const createOrder = createAsyncThunk(
   "order/create",
@@ -44,6 +44,20 @@ const initialState: OrderState = {
   error: null
 };
 
+
+
+export const getUserOrders = createAsyncThunk(
+  "order/getUserOrders",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await privateGet
+        ("/orders", token);
+      return response;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch orders");
+    }
+  }
+);
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -62,6 +76,18 @@ const orderSlice = createSlice({
       state.orders.unshift(action.payload);
     });
     builder.addCase(createOrder.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    })
+    builder.addCase(getUserOrders.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getUserOrders.fulfilled, (state, action) => {
+      state.loading = false;
+      state.orders = action.payload; // expecting array of orders
+    });
+    builder.addCase(getUserOrders.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
     });
