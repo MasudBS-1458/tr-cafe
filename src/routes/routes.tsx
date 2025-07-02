@@ -7,6 +7,8 @@ import Register from "../pages/auth/Register";
 import VerifyOTP from "../pages/auth/VerifyOTP";
 import PrivateRoute from "./PrivateRoute";
 import Profile from "../pages/user/Profile";
+import Notifications from "../pages/notification/Notifications";
+import Cart from "../pages/cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,18 @@ const router = createBrowserRouter([
             <Profile />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/user/notifications",
+        element: (
+          <PrivateRoute>
+            <Notifications />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/carts",
+        element: <Cart />,
       },
     ],
   },

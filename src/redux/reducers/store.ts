@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
 import authSlice from "../reducers/auth/authSlice";
 import foodSlice from "../reducers/food/foodsSlice";
+import cartSlice from "../reducers/cart/cartSlice";
 const persistConfig = {
   key: "authentication",
   storage,
@@ -11,7 +12,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, authSlice);
 const combinedReducer = {
   user: persistedReducer,
-  foods: foodSlice
+  foods: foodSlice,
+  carts: cartSlice
 };
 const middlewares: any[] = [];
 if (import.meta.env.NODE_ENV === "development") {

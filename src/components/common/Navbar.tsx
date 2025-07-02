@@ -9,6 +9,7 @@ import { logout } from '../../redux/reducers/auth/authSlice';
 
 const Navbar: React.FC = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
+  const { totalQuantity } = useSelector((state: RootState) => state.carts);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dispatch = useDispatch();
@@ -30,56 +31,43 @@ const Navbar: React.FC = () => {
     <nav className="w-full relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Left side - Logo/Title and Mobile menu button */}
           <div className="flex items-center">
-            {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
               className="md:hidden p-2 text-gray-600 hover:text-orange-600 rounded-full focus:outline-none"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
-
-            {/* Logo/Title */}
             <div className="flex-shrink-0 ml-2 md:ml-0">
               <h1 className="text-2xl font-bold text-orange-600 cursor-pointer hover:text-orange-700 transition-colors">
                 TR-Cafe
               </h1>
             </div>
           </div>
-
-          {/* Center - Navigation Links (hidden on mobile) */}
           <div className="hidden md:flex md:flex-col md:flex-row md:mx-6">
             <Link to="/" className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0">Home</Link>
             <Link to="" className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0">Shop</Link>
             <Link to="" className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0">Contact</Link>
             <Link to="" className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0">About</Link>
           </div>
-
-          {/* Right side - Icons and Login/User */}
           <div className="flex items-center space-x-4">
-            {/* Search Icon (mobile only) */}
             <button className="md:hidden p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-full transition-all">
               <Search className="h-6 w-6" />
             </button>
-
-            {/* Notification Icon (hidden on mobile) */}
-            <button className="hidden sm:block relative p-2 text-gray-900 hover:text-orange-600 hover:bg-orange-50 rounded-full transition-all">
+            <Link to='/user/notifications'><button className="hidden sm:block relative p-2 text-gray-900 hover:text-orange-600 hover:bg-orange-50 rounded-full transition-all">
               <Bell className="h-4 w-4" />
               <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                 3
               </span>
             </button>
-
-            {/* Cart Icon */}
-            <button className="relative p-2 text-gray-900 hover:text-orange-600 hover:bg-orange-50 rounded-full transition-all">
-              <ShoppingCart className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
-                2
-              </span>
-            </button>
-
-            {/* Login Button or User Icon */}
+            </Link>
+            <Link to="/carts">
+              <button className="relative p-2 text-gray-900 hover:text-orange-600 hover:bg-orange-50 rounded-full transition-all">
+                <ShoppingCart className="h-4 w-4" />
+                <span className="absolute -top-1 -right-1 h-4 w-4 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              </button></Link>
             {isAuthenticated === 'success' ? (
               <div className="relative">
                 <button
@@ -88,8 +76,6 @@ const Navbar: React.FC = () => {
                 >
                   <User className="h-6 w-6" />
                 </button>
-
-                {/* User Dropdown Menu */}
                 {isUserDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link
@@ -125,8 +111,6 @@ const Navbar: React.FC = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile menu (shown when menu is open) */}
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -200,7 +184,7 @@ const Navbar: React.FC = () => {
           </div>
         )}
       </div>
-    </nav>
+    </nav >
   );
 };
 
