@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-interface AuthState {
-  isAuthenticated: 'loading' | 'success';
-  user: null;
-  token: string | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  errorMessage: string | null | { error: string };
-}
+import type {
+  AuthState,
+  LoginCredentials,
+  RegisterData,
+  VerifyOtpData
+} from '../../../types/authTypes';
+import { publicPost } from '../../../services/apiCaller';
 
 const initialState: AuthState = {
   isAuthenticated: 'loading',
@@ -15,32 +13,53 @@ const initialState: AuthState = {
   token: null,
   status: 'idle',
   errorMessage: null,
+  registeredEmail: null,
+  isOtpSent: 'idle',
+  isOtpVerified: 'idle'
 };
 
-// Async thunk for user registration
+// Helper function for error handling
+const handleAuthError = (error: any) => {
+  return error.response?.data?.error || 'An unexpected error occurred';
+};
+
+// Async thunks
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: { email: string; password: string }, { rejectWithValue }) => {
+  async (userData: RegisterData, { rejectWithValue }) => {
     try {
-      console.log("userData to create", userData)
-      const response = await axios.post('https://personal-balance-manager.onrender.com/api/register', userData);
-      return response.data;
-    } catch (errorMessage: any) {
-      return rejectWithValue(errorMessage?.response?.data?.error);
+      const response = await publicPost('/register', userData);
+      // Store email in localStorage
+      localStorage.setItem('otpVerificationEmail', userData.email);
+      return response;
+    } catch (error) {
+      return rejectWithValue(handleAuthError(error));
     }
   }
 );
 
-// Async thunk for user login
+export const verifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async (otpData: VerifyOtpData, { rejectWithValue }) => {
+    try {
+      const response = await publicPost('/verify-otp', otpData);
+      // Clear the email from localStorage after successful verification
+      localStorage.removeItem('otpVerificationEmail');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleAuthError(error));
+    }
+  }
+);
+
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
-      console.log("credentials ", credentials)
-      const response = await axios.post('https://personal-balance-manager.onrender.com/api/login', credentials);
+      const response = await publicPost('/login', credentials);
       return response.data;
-    } catch (errorMessage: any) {
-      return rejectWithValue(errorMessage.response.data);
+    } catch (error) {
+      return rejectWithValue(handleAuthError(error));
     }
   }
 );
@@ -49,28 +68,50 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
+    logout: (state) => {
       state.user = null;
       state.token = null;
       state.status = 'idle';
       state.isAuthenticated = 'loading';
       state.errorMessage = null;
+      state.registeredEmail = null;
+      localStorage.removeItem('otpVerificationEmail');
     },
+    clearError: (state) => {
+      state.errorMessage = null;
+    },
+    clearOtpVerifiedState: (state) => {
+      state.isOtpVerified = 'completetd',
+        state.isOtpSent = 'completetd'
+    }
   },
   extraReducers: (builder) => {
     builder
-      // Register cases
       .addCase(registerUser.pending, (state) => {
-        state.status = 'loading';
+        state.isOtpSent = 'loading';
         state.errorMessage = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.status = 'succeeded';
-        state.user = action.payload.user;
+        state.isOtpSent = 'succeeded';
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.status = 'failed';
-        state.errorMessage = action.payload as string
+        state.isOtpSent = 'failed';
+        state.errorMessage = action.payload as string;
+        localStorage.removeItem('otpVerificationEmail');
+      })
+      // OTP verification cases
+      .addCase(verifyOtp.pending, (state) => {
+        state.isOtpVerified = 'loading';
+        state.errorMessage = null;
+      })
+      .addCase(verifyOtp.fulfilled, (state) => {
+        state.isOtpVerified = 'succeeded';
+        state.registeredEmail = null;
+      })
+      .addCase(verifyOtp.rejected, (state, action) => {
+        state.isOtpVerified = 'failed';
+        state.errorMessage = action.payload as string;
       })
       // Login cases
       .addCase(loginUser.pending, (state) => {
@@ -80,14 +121,15 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.isAuthenticated = 'success';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = action.payload?.user || null;
+        state.token = action.payload?.token || null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
         state.errorMessage = action.payload as string;
-      });
-  },
+      })
+  }
 });
-export const { logout } = authSlice.actions;
+
+export const { logout, clearError, clearOtpVerifiedState } = authSlice.actions;
 export default authSlice.reducer;

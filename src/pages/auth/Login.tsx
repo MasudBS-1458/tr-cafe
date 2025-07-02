@@ -9,23 +9,16 @@ const Login: React.FC = () => {
   const { status, errorMessage, isAuthenticated } = useSelector((state: RootState) => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-
   useEffect(() => {
     if (isAuthenticated === 'success') {
       // alert('Logged in');
       navigate('/');
     }
   }, [isAuthenticated, navigate, errorMessage]);
-
-
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
   };
-
-
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-sm w-full space-y-8">
