@@ -56,12 +56,8 @@ const Checkout = () => {
 
       // Prepare delivery address
       const deliveryAddress = `
-        ${formData.firstName} ${formData.lastName},
         ${formData.address},
         ${formData.apartment ? `Apt: ${formData.apartment},` : ''}
-        ${formData.city}
-        Phone: ${formData.phone}
-        ${formData.email ? `Email: ${formData.email}` : ''}
       `.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
 
       // Dispatch the order creation
