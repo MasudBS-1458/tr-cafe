@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../redux/reducers/auth/authSlice';
 import type { AppDispatch, RootState } from '../../redux/reducers/store';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import showToast from '../../utils/toast';
 const Register: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>();
@@ -13,19 +14,20 @@ const Register: React.FC = () => {
   useEffect(() => {
     if (isOtpSent === 'succeeded') {
       navigate('/auth/verify-otp');
+      showToast('success', 'OTP sent to your email')
     }
     if (errorMessage) {
       // console.log("error", errorMessage.error)
     }
   }, [isOtpSent, navigate, errorMessage]);
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(registerUser({ email, password }));
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-sm w-full space-y-8">
+      <div className="max-w-sm w-full space-y-8   rounded-md shadow-sm p-6">
         <div>
           <h2 className="mt-6 text-start text-xl font-medium text-gray-900">
             Create your account
@@ -41,7 +43,7 @@ const Register: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-800"> {typeof errorMessage === 'string' ? errorMessage : errorMessage?.error}</p>
+                <p className="text-sm text-red-800"> {errorMessage}</p>
               </div>
             </div>
           </div>
@@ -61,7 +63,7 @@ const Register: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your email"
               />
             </div>
@@ -78,7 +80,7 @@ const Register: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your password"
               />
             </div>
@@ -90,7 +92,7 @@ const Register: React.FC = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
               {isOtpSent === 'loading' ? (
                 <span className="flex items-center">
@@ -112,7 +114,7 @@ const Register: React.FC = () => {
               <Link to="/auth/login">
                 <button
                   type="button"
-                  className="font-medium text-orange-600 hover:text-orange-500 bg-transparent border-none cursor-pointer"
+                  className="font-medium text-gray-600 hover:text-gray-500 bg-transparent border-none cursor-pointer"
                   onClick={() => console.log('Sign up clicked')}
                 >
                   Login

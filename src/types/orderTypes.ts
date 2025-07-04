@@ -1,5 +1,7 @@
+import type { Food } from "./foodTypes";
 export interface OrderItem {
-  food: string;
+  _id: string;
+  food: Food;
   quantity: number;
   price: number;
 }
@@ -19,6 +21,8 @@ export interface Order {
 
 export interface OrderState {
   orders: Order[];
-  loading: boolean;
+  isOrderSubmitting: boolean;
+  isOrdercreated: boolean;
+  isOrderfetching: boolean;
   error: string | null;
 }

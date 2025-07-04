@@ -15,7 +15,7 @@ import { getUserOrders } from "../../redux/reducers/order/orderSlice";
 const UserOrders: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useSelector((state: RootState) => state.user);
-  const { orders, loading, error } = useSelector((state: RootState) => state.orders);
+  const { orders, isOrderfetching, error } = useSelector((state: RootState) => state.orders);
 
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
@@ -27,7 +27,8 @@ const UserOrders: React.FC = () => {
 
   const toggleOrderDetails = (orderId: string) => {
     const newExpanded = new Set(expandedOrders);
-    newExpanded.has(orderId) ? newExpanded.delete(orderId) : newExpanded.add(orderId);
+    (() => newExpanded.has(orderId) ? newExpanded.delete(orderId) : newExpanded.add(orderId))();
+
     setExpandedOrders(newExpanded);
   };
 
@@ -83,8 +84,8 @@ const UserOrders: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen  py-8">
+      <div className="max-w-5xl mx-auto ">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
@@ -94,7 +95,7 @@ const UserOrders: React.FC = () => {
           <p className="text-gray-600 mt-2">Track and manage your previous orders</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow border overflow-hidden">
+        <div className="bg-white rounded-2xl shadow  overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -109,9 +110,9 @@ const UserOrders: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {loading
+                {isOrderfetching
                   ? renderSkeletonRows()
-                  : orders.map((order) => (
+                  : orders?.map((order) => (
                     <React.Fragment key={order._id}>
                       <tr className="hover:bg-gray-50 transition">
                         <td className="px-6 py-4 text-sm text-gray-900">#{order._id}</td>
@@ -143,7 +144,7 @@ const UserOrders: React.FC = () => {
                         <td className="px-6 py-4">
                           <button
                             onClick={() => toggleOrderDetails(order._id)}
-                            className="flex items-center gap-2 text-blue-600 hover:underline focus:outline-none text-sm font-medium"
+                            className="flex items-center gap-2 text-red-600 hover:underline focus:outline-none text-sm font-medium"
                           >
                             {expandedOrders.has(order._id) ? "Hide Details" : "View Details"}
                             {expandedOrders.has(order._id) ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -186,7 +187,7 @@ const UserOrders: React.FC = () => {
                               {/* Info */}
                               <div>
                                 <h4 className="text-base font-semibold text-gray-800 mb-4">Order Info</h4>
-                                <div className="bg-white p-4 rounded-xl border shadow-sm space-y-4 text-sm text-gray-700">
+                                <div className="bg-white p-4 rounded-md border border-gray-100 space-y-4 text-sm text-gray-700">
                                   <div className="flex items-start gap-3">
                                     <MapPin className="w-5 h-5 text-gray-400 mt-1" />
                                     <div>
@@ -209,7 +210,7 @@ const UserOrders: React.FC = () => {
                                       <p>Updated: {formatDate(order.updatedAt)}</p>
                                     </div>
                                   </div>
-                                  <div className="pt-2 border-t flex justify-between items-center text-gray-900 font-semibold">
+                                  <div className="pt-2 border-t border-gray-100 flex justify-between items-center text-gray-900 font-semibold">
                                     <span>Total:</span>
                                     <span className="text-blue-600 font-bold text-lg">{formatCurrency(order.totalAmount)}</span>
                                   </div>
@@ -226,7 +227,7 @@ const UserOrders: React.FC = () => {
           </div>
 
           {/* Empty State */}
-          {!loading && orders.length === 0 && (
+          {!isOrderfetching && orders.length === 0 && (
             <div className="text-center py-12">
               <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No orders found</h3>

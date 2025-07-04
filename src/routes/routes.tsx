@@ -6,11 +6,16 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import VerifyOTP from "../pages/auth/VerifyOTP";
 import PrivateRoute from "./PrivateRoute";
+
+// Layout and Pages
+import DashboardLayout from "../pages/user/DashboardLayout";
 import Profile from "../pages/user/Profile";
 import Notifications from "../pages/notification/Notifications";
 import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";
 import UserOrders from "../pages/user/UserOrders";
+import ChangePassword from "../pages/user/ChangePassword";
+import OrderSuccess from "../pages/order/OrderSuccess";
 
 const router = createBrowserRouter([
   {
@@ -22,12 +27,26 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/user/profile",
+        path: "/user",
         element: (
           <PrivateRoute>
-            <Profile />
+            <DashboardLayout />
           </PrivateRoute>
         ),
+        children: [
+          {
+            index: true,
+            element: <Profile />,
+          },
+          {
+            path: "orders/list",
+            element: <UserOrders />,
+          },
+          {
+            path: "change-password",
+            element: <ChangePassword />,
+          },
+        ],
       },
       {
         path: "/user/notifications",
@@ -38,10 +57,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/user/orders/list",
+        path: "/order/status",
         element: (
           <PrivateRoute>
-            <UserOrders />
+            <OrderSuccess />
           </PrivateRoute>
         ),
       },

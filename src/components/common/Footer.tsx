@@ -1,16 +1,16 @@
 const Footer = () => {
   return (
     <div>
-      <footer className="bg-white dark:bg-gray-900">
+      <footer className="bg-gray-900 ">
         <div className="container p-6 mx-auto">
           <div className="lg:flex">
             <div className="w-full -mx-6 lg:w-2/5">
               <div className="px-6">
                 <a href="#">
-                  <img className="w-auto h-7" src="" alt="Tr-Cafe" />
+                  <img className="w-auto h-7" src="Tr-cafe" alt="Tr-Cafe" />
                 </a>
 
-                <p className="max-w-sm mt-2 text-gray-500 dark:text-gray-400">Join 31,000+ other and never miss out on new tips, tutorials, and more.</p>
+                <p className="max-w-sm mt-2  text-white">Join 31,000+ other and never miss out on new tips, tutorials, and more.</p>
 
                 <div className="flex mt-6 -mx-2">
                   <a href="#"
@@ -49,30 +49,30 @@ const Footer = () => {
             <div className="mt-6 lg:mt-0 lg:flex-1">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <div>
-                  <h3 className="text-gray-700 uppercase dark:text-white">About</h3>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Company</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">community</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Careers</a>
+                  <h3 className="text-white uppercase ">About</h3>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Company</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">community</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Careers</a>
                 </div>
 
                 <div>
-                  <h3 className="text-gray-700 uppercase dark:text-white">Drinks</h3>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Tea</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Coffee</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Shakes</a>
+                  <h3 className="text-white uppercase ">Drinks</h3>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Tea</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Coffee</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Shakes</a>
                 </div>
 
                 <div>
-                  <h3 className="text-gray-700 uppercase dark:text-white">Products</h3>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Breakfast</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Lunch</a>
-                  <a href="#" className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">Dinner</a>
+                  <h3 className="text-white uppercase ">Products</h3>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Breakfast</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Lunch</a>
+                  <a href="#" className="block mt-2 text-sm  text-white hover:underline">Dinner</a>
                 </div>
 
                 <div>
-                  <h3 className="text-gray-700 uppercase dark:text-white">Contact</h3>
-                  <span className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">+1 526 654 8965</span>
-                  <span className="block mt-2 text-sm text-gray-600 dark:text-gray-400 hover:underline">tr-cafe@email.com</span>
+                  <h3 className="text-white uppercase ">Contact</h3>
+                  <span className="block mt-2 text-sm  text-white hover:underline">+1 526 654 8965</span>
+                  <span className="block mt-2 text-sm  text-white hover:underline">tr-cafe@email.com</span>
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ const Footer = () => {
           <hr className="h-px my-6 bg-gray-200 border-none dark:bg-gray-700" />
 
           <div>
-            <p className="text-center text-gray-500 dark:text-gray-400">© Brand 2025 - All rights reserved</p>
+            <p className="text-center  text-white">© Brand 2025 - All rights reserved</p>
           </div>
         </div>
       </footer>

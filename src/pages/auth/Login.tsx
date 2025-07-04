@@ -2,32 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/reducers/auth/authSlice';
 import type { AppDispatch, RootState } from '../../redux/reducers/store';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import showToast from '../../utils/toast';
 const Login: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { status, errorMessage, isAuthenticated } = useSelector((state: RootState) => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   useEffect(() => {
     if (isAuthenticated === 'success') {
-      // alert('Logged in');
-      navigate('/');
+      const redirectTo = location.state?.from || '/';
+      navigate(redirectTo, { replace: true });
+      showToast('success', 'Logged in successfully');
     }
-  }, [isAuthenticated, navigate, errorMessage]);
-  const handleSubmit = (e: any) => {
+  }, [isAuthenticated, navigate, location.state]);
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
   };
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-sm w-full space-y-8">
+    <div className="min-h-screen flex items-center  justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-sm w-full space-y-8   rounded-md shadow-sm p-6">
         <div>
           <h2 className="mt-6 text-start text-xl font-medium text-gray-900">
             Sign in to your account
           </h2>
         </div>
-
         {errorMessage && (
           <div className="rounded-md bg-red-50 p-4">
             <div className="flex">
@@ -37,12 +39,12 @@ const Login: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-800"> {typeof errorMessage === 'string' ? errorMessage : errorMessage?.error}</p>
+                <p className="text-sm text-red-800">{errorMessage}</p>
+
               </div>
             </div>
           </div>
         )}
-
         <div className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
@@ -57,11 +59,10 @@ const Login: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your email"
               />
             </div>
-
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -74,12 +75,11 @@ const Login: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your password"
               />
             </div>
           </div>
-
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -87,29 +87,27 @@ const Login: React.FC = () => {
                 name="remember-me"
                 type="checkbox"
 
-                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 Remember me
               </label>
             </div>
-
             <div className="text-sm">
               <button
                 type="button"
-                className="font-medium text-orange-600 hover:text-orange-500 bg-transparent border-none cursor-pointer"
+                className="font-medium text-gray-600 hover:text-gray-500 bg-transparent border-none cursor-pointer"
                 onClick={() => console.log('Forgot password clicked')}
               >
                 Forgot your password?
               </button>
             </div>
           </div>
-
           <div>
             <button
               type="button"
               onClick={handleSubmit}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
               {status === 'loading' ? (
                 <span className="flex items-center">
@@ -124,14 +122,13 @@ const Login: React.FC = () => {
               )}
             </button>
           </div>
-
           <div className="text-center">
             <span className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link to="/auth/register">
                 <button
                   type="button"
-                  className="font-medium text-orange-600 hover:text-orange-500 bg-transparent border-none cursor-pointer"
+                  className="font-medium text-gray-600 hover:text-gray-500 bg-transparent border-none cursor-pointer"
                   onClick={() => console.log('Sign up clicked')}
                 >
                   Sign up
