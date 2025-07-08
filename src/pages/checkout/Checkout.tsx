@@ -3,7 +3,7 @@ import type { AppDispatch, RootState } from '../../redux/reducers/store';
 import { FaShoppingCart, FaMoneyBillWave, FaWallet, FaMapMarkerAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { clearCart } from '../../redux/reducers/cart/cartSlice';
-import { createOrder } from '../../redux/reducers/order/orderSlice';
+import { clearOrderStatus, createOrder } from '../../redux/reducers/order/orderSlice';
 import { Link, useNavigate } from 'react-router-dom'
 const Checkout = () => {
   const navigate = useNavigate()
@@ -75,6 +75,7 @@ const Checkout = () => {
   useEffect(() => {
     if (isOrdercreated) {
       navigate('/order/status');
+      dispatch(clearOrderStatus())
     }
   }, [isOrdercreated, navigate]);
   return (

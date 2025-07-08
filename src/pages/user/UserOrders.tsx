@@ -163,7 +163,7 @@ const UserOrders: React.FC = () => {
                                   Order Items
                                 </h4>
                                 <div className="space-y-4">
-                                  {order.items.map((item) => (
+                                  {order?.items.map((item) => (
                                     <div key={item._id} className="bg-white p-3 rounded-xl  shadow-sm flex items-center gap-4">
                                       <img
                                         src={item.food.image}
