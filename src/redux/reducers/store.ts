@@ -6,7 +6,7 @@ import authSlice from "../reducers/auth/authSlice";
 import foodSlice from "../reducers/food/foodsSlice";
 import cartSlice from "../reducers/cart/cartSlice";
 import orderSlice from "../reducers/order/orderSlice";
-import { foodApi } from '../reducers/food/foodApi'; // পাথ ঠিক করুন
+import { foodApi } from '../reducers/food/foodApi';
 
 const persistConfig = {
   key: "authentication",
@@ -20,7 +20,7 @@ const combinedReducer = {
   foods: foodSlice,
   carts: cartSlice,
   orders: orderSlice,
-  [foodApi.reducerPath]: foodApi.reducer, // RTK Query reducer যোগ করুন
+  [foodApi.reducerPath]: foodApi.reducer,
 };
 
 const middlewares: any[] = [];
@@ -37,7 +37,7 @@ export const store = configureStore({
       serializableCheck: false,
     })
       .concat(middlewares)
-      .concat(foodApi.middleware), // RTK Query middleware যোগ করুন
+      .concat(foodApi.middleware),
   devTools: true,
 });
 
