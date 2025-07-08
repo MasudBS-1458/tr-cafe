@@ -1,5 +1,5 @@
 // src/components/Food/Food.tsx
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetFoodsQuery } from '../../redux/reducers/food/foodApi';
 import { setFilters } from '../../redux/reducers/food/foodsSlice';
@@ -11,15 +11,11 @@ import 'rc-slider/assets/index.css';
 import type { Food } from '../../types/foodTypes';
 import showToast from '../../utils/toast';
 
-const Food = () => {
+const FoodScreen = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.foods.filters);
-  console.log("filters", filters);
-
   const [localPriceRange, setLocalPriceRange] = useState([filters.minPrice, filters.maxPrice]);
   const [favorites, setFavorites] = useState<string[]>([]);
-
-  // RTK Query ব্যবহার করে ডেটা ফেচ করা
   const { data: foods = [], isLoading, isError, error } = useGetFoodsQuery(filters);
 
   const categories = [...new Set(foods.map(food => food.category))];
@@ -249,4 +245,4 @@ const Food = () => {
   );
 };
 
-export default Food;
+export default FoodScreen;

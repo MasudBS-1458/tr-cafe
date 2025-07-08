@@ -98,7 +98,6 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isOtpSent = 'failed';
-
         state.errorMessage = action.payload as string;
         localStorage.removeItem('otpVerificationEmail');
       })

@@ -1,8 +1,9 @@
-import Food from "../../components/food/Food";
+import FoodScreen from "../../components/food/FoodScreen";
+
 const Home: React.FC = () => {
   return (
     <div>
-      <Food />
+      <FoodScreen />
     </div>
   );
 };
