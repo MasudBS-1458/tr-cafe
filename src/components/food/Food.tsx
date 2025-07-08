@@ -1,21 +1,28 @@
+// src/components/Food/Food.tsx
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearError, fetchFoods, setFilters } from '../../redux/reducers/food/foodsSlice';
+import { useGetFoodsQuery } from '../../redux/reducers/food/foodApi';
+import { setFilters } from '../../redux/reducers/food/foodsSlice';
+import { addToCart } from '../../redux/reducers/cart/cartSlice';
 import type { RootState } from '../../redux/reducers/store';
 import { FaHeart, FaRegHeart, FaShoppingCart } from 'react-icons/fa';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { addToCart } from '../../redux/reducers/cart/cartSlice';
+import type { Food } from '../../types/foodTypes';
 import showToast from '../../utils/toast';
+
 const Food = () => {
   const dispatch = useDispatch();
-  const { foods, loading, error, filters } = useSelector((state: RootState) => state.foods);
+  const filters = useSelector((state: RootState) => state.foods.filters);
+  console.log("filters", filters);
+
   const [localPriceRange, setLocalPriceRange] = useState([filters.minPrice, filters.maxPrice]);
   const [favorites, setFavorites] = useState<string[]>([]);
+
+  // RTK Query ব্যবহার করে ডেটা ফেচ করা
+  const { data: foods = [], isLoading, isError, error } = useGetFoodsQuery(filters);
+
   const categories = [...new Set(foods.map(food => food.category))];
-  useEffect(() => {
-    dispatch(fetchFoods(filters) as any);
-  }, [dispatch, filters]);
 
   const handleCategoryChange = (category: string) => {
     dispatch(setFilters({ ...filters, category }));
@@ -37,9 +44,9 @@ const Food = () => {
     }
   };
 
-  const handleAddToCart = (food: any) => {
-    dispatch(addToCart(food))
-    showToast('success', 'Product added to cart')
+  const handleAddToCart = (food: Food) => {
+    dispatch(addToCart(food));
+    showToast('success', 'Product added to cart');
   }
 
   const resetFilters = () => {
@@ -79,7 +86,7 @@ const Food = () => {
   return (
     <div className="w-full lg:w-3/4 mx-auto px-4 py-8 flex justify-center items-center md:mt-24">
       <div className="flex flex-col md:flex-row gap-8 w-full">
-        {/* Filter Section - Added min-w-[16rem] to maintain width */}
+        {/* Filter Section */}
         <div className="w-full md:min-w-[16rem] md:w-64 flex-shrink-0">
           <div className="bg-white rounded-lg p-4 sticky top-4">
             <div className="flex justify-between items-center mb-6">
@@ -94,7 +101,6 @@ const Food = () => {
               )}
             </div>
 
-            {/* Keep all your existing filter components */}
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-900">Categories</h3>
               <div className="space-y-2 mt-2">
@@ -149,26 +155,20 @@ const Food = () => {
           </div>
         </div>
 
-        {/* Content Section - Added min-h-screen to prevent layout shift */}
+        {/* Content Section */}
         <div className="flex-1 min-h-screen">
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg flex justify-between items-center">
-              <span>{error}</span>
-              <button
-                onClick={() => dispatch(clearError())}
-                className="text-red-500 hover:text-red-700 transition-colors"
-              >
-                ×
-              </button>
+          {isError && (
+            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg">
+              <span>{(error as any)?.data?.message || 'Failed to fetch foods'}</span>
             </div>
           )}
 
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-medium text-gray-900">
-                {loading ? 'Loading...' : `${foods.length} ${foods.length === 1 ? 'Item' : 'Items'}`}
+                {isLoading ? 'Loading...' : `${foods.length} ${foods.length === 1 ? 'Item' : 'Items'}`}
               </h2>
-              {!loading && foods.length === 0 && (
+              {!isLoading && foods.length === 0 && (
                 <button
                   onClick={resetFilters}
                   className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
@@ -179,7 +179,7 @@ const Food = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {loading ? (
+              {isLoading ? (
                 [...Array(6)].map((_, index) => (
                   <SkeletonLoader key={index} />
                 ))
@@ -196,7 +196,6 @@ const Food = () => {
               ) : (
                 foods.map((food) => (
                   <div key={food._id} className="bg-white rounded-lg overflow-hidden group">
-                    {/* Keep your existing product card JSX */}
                     <div className="relative">
                       {food.image && (
                         <div className="h-48 bg-gray-100 overflow-hidden">
