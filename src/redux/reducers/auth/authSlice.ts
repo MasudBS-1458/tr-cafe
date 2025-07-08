@@ -91,12 +91,14 @@ const authSlice = createSlice({
         state.isOtpSent = 'loading';
         state.errorMessage = null;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.isOtpSent = 'succeeded';
+        state.registeredEmail = action.payload as string;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isOtpSent = 'failed';
+
         state.errorMessage = action.payload as string;
         localStorage.removeItem('otpVerificationEmail');
       })

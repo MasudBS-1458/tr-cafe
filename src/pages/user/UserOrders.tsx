@@ -69,7 +69,7 @@ const UserOrders: React.FC = () => {
       minute: "2-digit",
     });
 
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+  const formatCurrency = (amount: number) => `৳ ${amount.toFixed(2)}`;
 
   const renderSkeletonRows = () => {
     return Array.from({ length: 5 }).map((_, index) => (
@@ -100,7 +100,7 @@ const UserOrders: React.FC = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                  {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th> */}
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
@@ -115,7 +115,7 @@ const UserOrders: React.FC = () => {
                   : orders?.map((order) => (
                     <React.Fragment key={order._id}>
                       <tr className="hover:bg-gray-50 transition">
-                        <td className="px-6 py-4 text-sm text-gray-900">#{order._id}</td>
+                        {/* <td className="px-6 py-4 text-sm text-gray-900">#{order._id}</td> */}
                         <td className="px-6 py-4 text-sm text-gray-900 flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-gray-400" />
                           {formatDate(order.createdAt)}
@@ -164,7 +164,7 @@ const UserOrders: React.FC = () => {
                                 </h4>
                                 <div className="space-y-4">
                                   {order.items.map((item) => (
-                                    <div key={item._id} className="bg-white p-3 rounded-xl border shadow-sm flex items-center gap-4">
+                                    <div key={item._id} className="bg-white p-3 rounded-xl  shadow-sm flex items-center gap-4">
                                       <img
                                         src={item.food.image}
                                         alt={item.food.name}
@@ -186,7 +186,8 @@ const UserOrders: React.FC = () => {
 
                               {/* Info */}
                               <div>
-                                <h4 className="text-base font-semibold text-gray-800 mb-4">Order Info</h4>
+                                <h4 className="text-base font-semibold text-gray-800 mb-2">Order Info</h4>
+                                <p className="mb-2 text-gray-600">Order ID {order._id}</p>
                                 <div className="bg-white p-4 rounded-md border border-gray-100 space-y-4 text-sm text-gray-700">
                                   <div className="flex items-start gap-3">
                                     <MapPin className="w-5 h-5 text-gray-400 mt-1" />
@@ -243,7 +244,7 @@ const UserOrders: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
