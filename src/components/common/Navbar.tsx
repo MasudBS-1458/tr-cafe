@@ -21,9 +21,9 @@ const Navbar: React.FC = () => {
 
 
   return (
-    <div className="w-full  shadow-md">
-      <div className="w-full md:w-3/4 mx-auto pt-2 pb-2  ">
-        <div className="flex items-center justify-between h-16">
+    <div className="w-full  shadow-sm">
+      <div className="w-full md:w-3/4 mx-auto pt-2 pb-2">
+        <div className="flex items-center justify-between h-12">
           <div className="flex items-center">
             <button
               onClick={toggleMenu}

@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/reducers/auth/authSlice';
 import type { AppDispatch, RootState } from '../../redux/reducers/store';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import showToast from '../../utils/toast';
+import { useForm, type SubmitHandler } from "react-hook-form";
+
+type FormValues = {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+};
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { status, errorMessage, isAuthenticated } = useSelector((state: RootState) => state.user);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    dispatch(loginUser({ email: data.email, password: data.password }));
+  };
+
   useEffect(() => {
     if (isAuthenticated === 'success') {
       const redirectTo = location.state?.from || '/';
@@ -18,13 +31,10 @@ const Login: React.FC = () => {
       showToast('success', 'Logged in successfully');
     }
   }, [isAuthenticated, navigate, location.state]);
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(loginUser({ email, password }));
-  };
+
   return (
-    <div className="min-h-screen flex items-center  justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-sm w-full space-y-8   rounded-md shadow-sm p-6">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-sm w-full space-y-8 rounded-md shadow-sm p-6">
         <div>
           <h2 className="mt-6 text-start text-xl font-medium text-gray-900">
             Sign in to your account
@@ -40,12 +50,11 @@ const Login: React.FC = () => {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-red-800">{errorMessage}</p>
-
               </div>
             </div>
           </div>
         )}
-        <div className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -53,15 +62,21 @@ const Login: React.FC = () => {
               </label>
               <input
                 id="email"
-                name="email"
                 type="email"
                 autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+              )}
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -69,24 +84,29 @@ const Login: React.FC = () => {
               </label>
               <input
                 id="password"
-                name="password"
                 type="password"
                 autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters"
+                  }
+                })}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                 placeholder="Enter your password"
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
                 id="remember-me"
-                name="remember-me"
                 type="checkbox"
-
+                {...register("rememberMe")}
                 className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
@@ -105,9 +125,9 @@ const Login: React.FC = () => {
           </div>
           <div>
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              disabled={status === 'loading'}
             >
               {status === 'loading' ? (
                 <span className="flex items-center">
@@ -136,9 +156,9 @@ const Login: React.FC = () => {
               </Link>
             </span>
           </div>
-        </div>
+        </form>
       </div>
-    </div >
+    </div>
   );
 };
 
